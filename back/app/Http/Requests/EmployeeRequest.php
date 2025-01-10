@@ -12,7 +12,7 @@ class EmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -54,7 +54,6 @@ class EmployeeRequest extends FormRequest
                 'required',
                 'string',
                 'min:6',
-                "confirmed"
             ],
             'department_id' => [
                 'required',
