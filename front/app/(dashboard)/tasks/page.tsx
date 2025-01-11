@@ -1,10 +1,9 @@
-"use client"
-import { Button } from "@/app/_components/ui/button";
-import { DataTable } from '@/app/_components/ui/datatable';
+"use client";
+import { DataTable } from "@/app/_components/ui/datatable";
 import { Input } from "@/app/_components/ui/input";
-import { Plus } from "lucide-react";
-import { useState } from 'react';
-import { taskColumns } from './_components/task-columns';
+import { useState } from "react";
+import { AddTaskButton } from "./_components/add-task-button";
+import { taskColumns } from "./_components/task-columns";
 
 export const mockTasks = [
   {
@@ -22,7 +21,6 @@ export const mockTasks = [
     dueDate: "2024-03-15",
   },
 ];
-
 
 const Tasks = () => {
   const [search, setSearch] = useState("");
@@ -42,13 +40,11 @@ const Tasks = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Button>
-          <Plus className="mr-1 h-4 w-4" /> Nova Tarefa
-        </Button>
+        <AddTaskButton />
       </div>
       <DataTable columns={taskColumns} data={mockTasks} />
     </div>
-  )
-}
+  );
+};
 
-export default Tasks
+export default Tasks;

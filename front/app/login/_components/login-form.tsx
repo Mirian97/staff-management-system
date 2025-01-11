@@ -1,20 +1,23 @@
-"use client"
+"use client";
 import { Button } from "@/app/_components/ui/button";
 import {
-  Form, FormControl,
+  Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { loginSchema, LoginType } from "@/app/_schemas/login-schema";
+import { useLogin } from "@/app/_hooks/useLogin";
+import { loginSchema, TLoginSchema } from "@/app/_schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const form = useForm<LoginType>({
+  const { login, isLoading } = useLogin();
+  const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -22,13 +25,9 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: LoginType) => {
-    console.log(values);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(login)} className="space-y-6">
         <FormField
           control={form.control}
           name="email"
@@ -68,7 +67,7 @@ const LoginForm = () => {
         </div>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export default LoginForm
+export default LoginForm;

@@ -17,20 +17,20 @@ export function useTask() {
 
   const { mutate: createDepartment } = useMutation({
     mutationFn: (payload: TTaskPayload) => taskService.create(payload),
-    onSuccess: refetchData,
+    onSuccess: () => refetchData(),
     onError: (error) => console.error('Erro ao criar departamento:', error),
   });
 
   const { mutate: updateDepartment } = useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: TTaskPayload }) =>
       taskService.update(id, payload),
-    onSuccess: refetchData,
+    onSuccess: () => refetchData(),
     onError: (error) => console.error('Erro ao atualizar departamento:', error),
   });
 
   const { mutate: deleteDepartment } = useMutation({
     mutationFn: (id: number) => taskService.delete(id),
-    onSuccess: refetchData,
+    onSuccess: () => refetchData(),
     onError: (error) => console.error('Erro ao excluir departamento:', error),
   });
 

@@ -1,14 +1,22 @@
 import * as z from "zod";
 
-export const employeeSchema = z.object({
-  firstName: z.string().min(2, "Nome deve ter no mínimo 2 caracteres"),
-  lastName: z.string().min(2, "Sobrenome deve ter no mínimo 2 caracteres"),
-  email: z.string().email("Email inválido"),
-  password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "As senhas não coincidem",
-  path: ["confirmPassword"],
-});
+export const employeeSchema = z
+  .object({
+    first_name: z.string().min(2, "Nome deve ter no mínimo 2 caracteres"),
+    last_name: z.string().min(2, "Sobrenome deve ter no mínimo 2 caracteres"),
+    email: z.string().email("Email inválido"),
+    phone: z.string().min(2, "Telefone deve ser um número válido"),
+    department_id: z
+      .string()
+      .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+        message: "O ID do departamento deve ser um número inteiro positivo",
+      }),
+    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
+    confirm_password: z.string(),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "As senhas não coincidem",
+    path: ["confirm_password"],
+  });
 
-export type TEmployeeSchema = z.infer<typeof employeeSchema>
+export type TEmployeeSchema = z.infer<typeof employeeSchema>;
