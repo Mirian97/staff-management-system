@@ -27,7 +27,10 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(login)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit((data) => login(data))}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="email"
@@ -55,7 +58,7 @@ const LoginForm = () => {
           )}
         />
         <div className="flex flex-col gap-4">
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" isLoading={isLoading}>
             Login
           </Button>
           <p className="text-center text-sm text-gray-600">
