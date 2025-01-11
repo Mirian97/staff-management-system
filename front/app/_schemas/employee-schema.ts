@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const registerSchema = z.object({
+export const employeeSchema = z.object({
   firstName: z.string().min(2, "Nome deve ter no mínimo 2 caracteres"),
   lastName: z.string().min(2, "Sobrenome deve ter no mínimo 2 caracteres"),
   email: z.string().email("Email inválido"),
@@ -11,4 +11,4 @@ export const registerSchema = z.object({
   path: ["confirmPassword"],
 });
 
-export type TRegisterSchema = z.infer<typeof registerSchema>
+export type TEmployeeSchema = z.infer<typeof employeeSchema>

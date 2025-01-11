@@ -11,14 +11,14 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { registerSchema, RegisterType } from "@/app/_schemas/register-schema";
+import { employeeSchema, TEmployeeSchema } from "@/app/_schemas/employee-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 const RegisterForm = () => {
-  const form = useForm<RegisterType>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<TEmployeeSchema>({
+    resolver: zodResolver(employeeSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -28,7 +28,7 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (values: RegisterType) => {
+  const onSubmit = (values: TEmployeeSchema) => {
     console.log(values);
   };
 
