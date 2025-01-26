@@ -10,7 +10,7 @@ import {
 } from "@/app/_components/ui/dialog";
 import { Trash2 } from "lucide-react";
 import { FC } from "react";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 
 interface DeleteDialogProps {
   title?: string;

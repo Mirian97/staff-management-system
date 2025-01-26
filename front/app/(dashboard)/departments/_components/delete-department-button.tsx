@@ -1,4 +1,4 @@
-import { DeleteDialog } from "@/app/_components/DeleteDialog";
+import { DeleteDialog } from "@/app/_components/delete-dialog";
 
 export const DeleteDepartmentButton = () => {
   return (

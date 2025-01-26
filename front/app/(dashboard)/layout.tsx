@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
-import DescriptiveAmountCard from "../_components/DescriptiveAmountCard";
+import DescriptiveAmountCard from "../_components/descriptive-amount-card";
 import { Button } from "../_components/ui/button";
 import { useAuth } from "../_hooks/useAuth";
 import useStatistic from "../_hooks/useStatistic";
