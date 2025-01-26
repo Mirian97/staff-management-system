@@ -6,11 +6,11 @@ import { departmentService } from "../_service/department-service";
 
 export const DEPARTMENTS_QUERY_KEY = "departments";
 
-interface DepartmentsHookProps {
+interface DepartmentHookProps {
   closeDialog?: () => void;
 }
 
-export function useDepartment({ closeDialog }: DepartmentsHookProps = {}) {
+export function useDepartment({ closeDialog }: DepartmentHookProps = {}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get("page") ?? "1";
@@ -52,7 +52,7 @@ export function useDepartment({ closeDialog }: DepartmentsHookProps = {}) {
   const { mutate: deleteDepartment } = useMutation({
     mutationFn: (id: number) => departmentService.delete(id),
     onSuccess: () => {
-      toast.success("Departamento deletado!");
+      toast.success("Departamento excluído!");
       refetchData();
     },
     onError: (error) => console.error("Erro ao excluir departamento:", error),

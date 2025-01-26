@@ -1,43 +1,67 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { taskService, TTaskPayload } from '../_service/task-service';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { TTaskSchema } from "../_schemas/task-schema";
+import { taskService } from "../_service/task-service";
 
-export const TASKS_QUERY_KEY = 'employees';
+export const TASKS_QUERY_KEY = "tasks";
 
-export function useTask() {
+interface TaskHookProps {
+  closeDialog?: () => void;
+}
+
+export function useTask({ closeDialog }: TaskHookProps = {}) {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const currentPage = searchParams?.get("page") ?? "1";
 
   const { data } = useQuery({
-    queryKey: [TASKS_QUERY_KEY],
-    queryFn: () => taskService.getAll(),
+    queryKey: [TASKS_QUERY_KEY, currentPage],
+    queryFn: () => taskService.getAll(Number(currentPage)),
+    select: (data) => ({
+      lastPage: data.last_page,
+      tasks: data.data,
+    }),
   });
 
   const refetchData = () => {
-    queryClient.invalidateQueries({ queryKey: [TASKS_QUERY_KEY] })
-  }
+    queryClient.invalidateQueries({ queryKey: [TASKS_QUERY_KEY] });
+    closeDialog?.();
+  };
 
-  const { mutate: createDepartment } = useMutation({
-    mutationFn: (payload: TTaskPayload) => taskService.create(payload),
-    onSuccess: () => refetchData(),
-    onError: (error) => console.error('Erro ao criar departamento:', error),
+  const { mutate: createTask } = useMutation({
+    mutationFn: (payload: TTaskSchema) => taskService.create(payload),
+    onSuccess: () => {
+      toast.success("Tarefa criada!");
+      refetchData();
+    },
+    onError: (error) => console.error("Erro ao criar departamento:", error),
   });
 
-  const { mutate: updateDepartment } = useMutation({
-    mutationFn: ({ id, payload }: { id: number; payload: TTaskPayload }) =>
+  const { mutate: updateTask } = useMutation({
+    mutationFn: ({ id, payload }: { id: number; payload: TTaskSchema }) =>
       taskService.update(id, payload),
-    onSuccess: () => refetchData(),
-    onError: (error) => console.error('Erro ao atualizar departamento:', error),
+    onSuccess: () => {
+      toast.success("Tarefa atualizada!");
+      refetchData();
+    },
+    onError: (error) => console.error("Erro ao atualizar departamento:", error),
   });
 
-  const { mutate: deleteDepartment } = useMutation({
+  const { mutate: deleteTask } = useMutation({
     mutationFn: (id: number) => taskService.delete(id),
-    onSuccess: () => refetchData(),
-    onError: (error) => console.error('Erro ao excluir departamento:', error),
+    onSuccess: () => {
+      toast.success("Tarefa excluída!");
+      refetchData();
+    },
+    onError: (error) => console.error("Erro ao excluir departamento:", error),
   });
 
   return {
-    departments: data,
-    createDepartment,
-    updateDepartment,
-    deleteDepartment,
+    tasks: data?.tasks,
+    lastPage: data?.lastPage,
+    createTask,
+    updateTask,
+    deleteTask,
   };
 }

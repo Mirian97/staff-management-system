@@ -1,10 +1,16 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
+import { TTaskSchema } from "@/app/_schemas/task-schema";
+import { EntityId } from "@/app/_types/with-id-type";
 import { Edit2 } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { TaskForm } from "./task-form";
 
-export const EditTaskButton = () => {
+interface EditTaskButtonProps extends EntityId {
+  task: TTaskSchema;
+}
+
+export const EditTaskButton: FC<EditTaskButtonProps> = ({ id, task }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -17,7 +23,7 @@ export const EditTaskButton = () => {
       >
         <Edit2 />
       </Button>
-      <TaskForm isOpen={isOpen} setIsOpen={setIsOpen} />
+      <TaskForm isOpen={isOpen} setIsOpen={setIsOpen} taskID={id} task={task} />
     </>
   );
 };

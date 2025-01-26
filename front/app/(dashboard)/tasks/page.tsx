@@ -1,6 +1,7 @@
 "use client";
 import { DataTable } from "@/app/_components/ui/datatable";
 import { Input } from "@/app/_components/ui/input";
+import { useTask } from "@/app/_hooks/useTask";
 import { useState } from "react";
 import { AddTaskButton } from "./_components/add-task-button";
 import { taskColumns } from "./_components/task-columns";
@@ -23,13 +24,8 @@ export const mockTasks = [
 ];
 
 const Tasks = () => {
+  const { tasks, lastPage } = useTask();
   const [search, setSearch] = useState("");
-
-  const filteredTasks = mockTasks.filter(
-    (task) =>
-      task.title.toLowerCase().includes(search.toLowerCase()) ||
-      task.description.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div className="space-y-4">
@@ -42,7 +38,11 @@ const Tasks = () => {
         />
         <AddTaskButton />
       </div>
-      <DataTable columns={taskColumns} data={mockTasks} />
+      <DataTable
+        columns={taskColumns}
+        data={tasks || []}
+        pageCount={lastPage}
+      />
     </div>
   );
 };

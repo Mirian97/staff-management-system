@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { Textarea } from "@/app/_components/ui/textarea";
+import { useTask } from "@/app/_hooks/useTask";
 import { taskSchema, TTaskSchema } from "@/app/_schemas/task-schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,22 +37,33 @@ interface TaskFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   taskID?: number;
+  task?: TTaskSchema;
 }
 
-export const TaskForm: FC<TaskFormProps> = ({ isOpen, setIsOpen, taskID }) => {
+export const TaskForm: FC<TaskFormProps> = ({
+  isOpen,
+  setIsOpen,
+  taskID,
+  task,
+}) => {
+  const { createTask, updateTask } = useTask({
+    closeDialog: () => setIsOpen(false),
+  });
   const isEditting = taskID !== undefined;
   const form = useForm<TTaskSchema>({
     resolver: zodResolver(taskSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      assignee_id: undefined,
-      due_date: undefined,
-    },
+    defaultValues: task,
   });
 
   const onSubmit = (values: TTaskSchema) => {
-    console.log(values);
+    if (isEditting) {
+      updateTask({
+        id: taskID,
+        payload: values,
+      });
+    } else {
+      createTask(values);
+    }
   };
 
   return (

@@ -28,7 +28,7 @@ export const DeleteDepartmentButton: FC<EditDepartmentButtonProps> = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         deleteAction={() => deleteDepartment(id)}
-        description={`Esta ação irá excluir este departamento de ${department.name}. Deseja excluir?`}
+        description={`Esta ação irá excluir este departamento de '${department.name}'. Deseja excluir?`}
       />
     </>
   );

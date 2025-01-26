@@ -1,28 +1,27 @@
 import { api } from "../_config/api";
+import { TTaskSchema } from "../_schemas/task-schema";
+import { PaginatedResponse } from "../_types/response-type";
 import { EntityWithId } from "../_types/with-id-type";
 
-export type TTaskPayload = {
-  title: string;
-  description: string;
-  assignee_id: number;
-  due_date: string;
-};
-
-export type TTask = EntityWithId<TTaskPayload>;
+export type TTask = EntityWithId<TTaskSchema>;
 
 class TaskService {
   private readonly basePath = "/tasks";
 
-  async getAll(): Promise<TTask[]> {
-    const { data } = await api.get(this.basePath);
+  async getAll(page?: number): Promise<PaginatedResponse<TTask>> {
+    const { data } = await api.get(this.basePath, {
+      params: {
+        page,
+      },
+    });
     return data;
   }
 
-  async create(payload: TTaskPayload): Promise<void> {
+  async create(payload: TTaskSchema): Promise<void> {
     await api.post(this.basePath, payload);
   }
 
-  async update(id: number, payload: TTaskPayload): Promise<void> {
+  async update(id: number, payload: TTaskSchema): Promise<void> {
     await api.put(`${this.basePath}/${id}`, payload);
   }
 
