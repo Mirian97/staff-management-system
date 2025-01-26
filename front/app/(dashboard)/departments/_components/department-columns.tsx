@@ -21,10 +21,14 @@ export const departmentColumns: ColumnDef<TDepartment>[] = [
   {
     accessorKey: "actions",
     header: () => <div className="text-center">Ações</div>,
-    cell: () => (
+    cell: ({
+      row: {
+        original: { id, ...department },
+      },
+    }) => (
       <div className="text-center">
-        <EditDepartmentButton />
-        <DeleteDepartmentButton />
+        <EditDepartmentButton id={id} department={department} />
+        <DeleteDepartmentButton id={id} department={department} />
       </div>
     ),
   },

@@ -1,5 +1,5 @@
 import { api } from "../_config/api";
-import { TypeWithId } from "../_types/with-id-type";
+import { EntityWithId } from "../_types/with-id-type";
 
 export type TTaskPayload = {
   title: string;
@@ -8,10 +8,10 @@ export type TTaskPayload = {
   due_date: string;
 };
 
-export type TTask = TypeWithId<TTaskPayload>
+export type TTask = EntityWithId<TTaskPayload>;
 
 class TaskService {
-  private readonly basePath = '/tasks';
+  private readonly basePath = "/tasks";
 
   async getAll(): Promise<TTask[]> {
     const { data } = await api.get(this.basePath);

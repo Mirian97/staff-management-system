@@ -1,5 +1,5 @@
 import { api } from "../_config/api";
-import { TypeWithId } from "../_types/with-id-type";
+import { EntityWithId } from "../_types/with-id-type";
 
 export type TEmployeePayload = {
   first_name: string;
@@ -10,10 +10,10 @@ export type TEmployeePayload = {
   department_id: number;
 };
 
-export type TEmployee = TypeWithId<TEmployeePayload>
+export type TEmployee = EntityWithId<TEmployeePayload>;
 
 class EmployeeService {
-  private readonly basePath = '/employees';
+  private readonly basePath = "/employees";
 
   async getAll(): Promise<TEmployee[]> {
     const { data } = await api.get(this.basePath);

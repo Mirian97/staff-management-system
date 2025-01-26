@@ -1,15 +1,12 @@
 import { api } from "../_config/api";
+import { TDepartmentSchema } from "../_schemas/department-schema";
 import { PaginatedResponse } from "../_types/response-type";
+import { EntityWithId } from "../_types/with-id-type";
 
-export type TDepartment = {
-  id: number;
-  name: string;
+export type TDepartment = EntityWithId<{
   employees_count: string;
-};
-
-export type TDepartmentPayload = {
   name: string;
-};
+}>;
 
 class DepartmentService {
   private readonly basePath = "/departments";
@@ -23,11 +20,11 @@ class DepartmentService {
     return data;
   }
 
-  async create(payload: TDepartmentPayload): Promise<void> {
+  async create(payload: TDepartmentSchema): Promise<void> {
     await api.post(this.basePath, payload);
   }
 
-  async update(id: number, payload: TDepartmentPayload): Promise<void> {
+  async update(id: number, payload: TDepartmentSchema): Promise<void> {
     await api.put(`${this.basePath}/${id}`, payload);
   }
 

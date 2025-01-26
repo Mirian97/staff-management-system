@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import {
-  TDepartmentPayload,
-  departmentService,
-} from "../_service/department-service";
+import { toast } from "sonner";
+import { TDepartmentSchema } from "../_schemas/department-schema";
+import { departmentService } from "../_service/department-service";
 
 export const DEPARTMENTS_QUERY_KEY = "departments";
 
-export function useDepartment() {
+interface DepartmentsHookProps {
+  closeDialog?: () => void;
+}
+
+export function useDepartment({ closeDialog }: DepartmentsHookProps = {}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get("page") ?? "1";
@@ -23,30 +26,35 @@ export function useDepartment() {
 
   const refetchData = () => {
     queryClient.invalidateQueries({ queryKey: [DEPARTMENTS_QUERY_KEY] });
+    closeDialog?.();
   };
 
   const { mutate: createDepartment } = useMutation({
-    mutationFn: (payload: TDepartmentPayload) =>
+    mutationFn: (payload: TDepartmentSchema) =>
       departmentService.create(payload),
-    onSuccess: () => refetchData(),
+    onSuccess: () => {
+      toast.success("Departamento criado!");
+      refetchData();
+    },
     onError: (error) => console.error("Erro ao criar departamento:", error),
   });
 
   const { mutate: updateDepartment } = useMutation({
-    mutationFn: ({
-      id,
-      payload,
-    }: {
-      id: number;
-      payload: TDepartmentPayload;
-    }) => departmentService.update(id, payload),
-    onSuccess: () => refetchData(),
+    mutationFn: ({ id, payload }: { id: number; payload: TDepartmentSchema }) =>
+      departmentService.update(id, payload),
+    onSuccess: () => {
+      toast.success("Departamento atualizado!");
+      refetchData();
+    },
     onError: (error) => console.error("Erro ao atualizar departamento:", error),
   });
 
   const { mutate: deleteDepartment } = useMutation({
     mutationFn: (id: number) => departmentService.delete(id),
-    onSuccess: () => refetchData(),
+    onSuccess: () => {
+      toast.success("Departamento deletado!");
+      refetchData();
+    },
     onError: (error) => console.error("Erro ao excluir departamento:", error),
   });
 

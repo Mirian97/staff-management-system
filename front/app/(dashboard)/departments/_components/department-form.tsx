@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
+import { useDepartment } from "@/app/_hooks/useDepartment";
 import {
   departmentSchema,
   TDepartmentSchema,
@@ -29,23 +30,37 @@ interface DepartmentFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   departmentID?: number;
+  department?: TDepartmentSchema;
 }
 
 export const DepartmentForm: FC<DepartmentFormProps> = ({
   isOpen,
   setIsOpen,
   departmentID,
+  department,
 }) => {
+  const { createDepartment, updateDepartment } = useDepartment({
+    closeDialog: () => setIsOpen(false),
+  });
   const isEditting = departmentID !== undefined;
   const form = useForm<TDepartmentSchema>({
     resolver: zodResolver(departmentSchema),
     defaultValues: {
-      name: "",
+      name: department?.name || "",
     },
   });
 
   const onSubmit = (values: TDepartmentSchema) => {
-    console.log(values);
+    if (isEditting) {
+      updateDepartment({
+        id: departmentID,
+        payload: values,
+      });
+    } else {
+      createDepartment({
+        ...values,
+      });
+    }
   };
 
   return (

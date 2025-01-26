@@ -1,10 +1,19 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
+import { TDepartmentSchema } from "@/app/_schemas/department-schema";
+import { EntityId } from "@/app/_types/with-id-type";
 import { Edit2 } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { DepartmentForm } from "./department-form";
 
-export const EditDepartmentButton = () => {
+export interface EditDepartmentButtonProps extends EntityId {
+  department: TDepartmentSchema;
+}
+
+export const EditDepartmentButton: FC<EditDepartmentButtonProps> = ({
+  id,
+  department,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,7 +29,8 @@ export const EditDepartmentButton = () => {
       <DepartmentForm
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        departmentID={100}
+        departmentID={id}
+        department={department}
       />
     </>
   );

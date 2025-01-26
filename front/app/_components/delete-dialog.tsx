@@ -8,26 +8,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/_components/ui/dialog";
-import { Trash2 } from "lucide-react";
 import { FC } from "react";
 import { Button } from "./ui/button";
 
 interface DeleteDialogProps {
   title?: string;
   description?: string;
+  deleteAction: () => void;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
 export const DeleteDialog: FC<DeleteDialogProps> = ({
   title = "Exclusão",
   description,
+  deleteAction,
+  isOpen,
+  setIsOpen,
 }) => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="xs" className="hover:text-red-700">
-          <Trash2 />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <DialogTrigger asChild />
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -37,7 +38,9 @@ export const DeleteDialog: FC<DeleteDialogProps> = ({
           <DialogClose asChild>
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
-          <Button variant="destructive">Excluir</Button>
+          <Button variant="destructive" onClick={deleteAction}>
+            Excluir
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
