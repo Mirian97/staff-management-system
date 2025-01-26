@@ -1,15 +1,16 @@
 import { api } from "../_config/api";
-import { TEmployeeSchema } from "../_schemas/employee-schema";
 import { TLoginSchema } from "../_schemas/login-schema";
-import { TToken } from "../_types/auth-type";
+import { TToken, TWhoAmi } from "../_types/auth-type";
 
 class AuthService {
+  async whoAmi() {
+    return await api.get<TWhoAmi>("/me");
+  }
   async login(payload: TLoginSchema) {
     return await api.post<TToken>("/login", payload);
   }
-
-  async register(payload: TEmployeeSchema) {
-    await api.post("/register", payload);
+  async logout() {
+    return await api.get<TWhoAmi>("/logout");
   }
 }
 

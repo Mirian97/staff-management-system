@@ -12,7 +12,7 @@ export function useLogin() {
   const loginMutation = useMutation({
     mutationFn: (data: TLoginSchema) => authService.login(data),
     onSuccess: (data) => {
-      setStorage("AUTH", data);
+      setStorage("AUTH_TOKEN", data.data.access_token);
       toast.success("Login realizado com sucesso!");
       router.push("/");
     },
