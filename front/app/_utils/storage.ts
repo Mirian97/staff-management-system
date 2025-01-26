@@ -40,7 +40,7 @@ export const removeStorage = (key: string): void => {
   }
 };
 
-export const clearAllStorage = (key: string): void => {
+export const clearAllStorage = (): void => {
   try {
     localStorage.clear();
   } catch (error) {
