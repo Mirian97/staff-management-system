@@ -8,7 +8,7 @@ import { departmentColumns } from "./_components/department-columns";
 
 const Departments = () => {
   const [search, setSearch] = useState("");
-  const { departments } = useDepartment();
+  const { departments, lastPage } = useDepartment();
 
   return (
     <div className="space-y-4">
@@ -21,7 +21,11 @@ const Departments = () => {
         />
         <AddDepartmentButton />
       </div>
-      <DataTable columns={departmentColumns} data={departments || []} />
+      <DataTable
+        columns={departmentColumns}
+        data={departments || []}
+        pageCount={lastPage}
+      />
     </div>
   );
 };

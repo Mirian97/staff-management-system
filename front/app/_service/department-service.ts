@@ -1,4 +1,5 @@
 import { api } from "../_config/api";
+import { PaginatedResponse } from "../_types/response-type";
 
 export type TDepartment = {
   id: number;
@@ -13,8 +14,12 @@ export type TDepartmentPayload = {
 class DepartmentService {
   private readonly basePath = "/departments";
 
-  async getAll(): Promise<TDepartment[]> {
-    const { data } = await api.get(this.basePath);
+  async getAll(page?: number): Promise<PaginatedResponse<TDepartment>> {
+    const { data } = await api.get(this.basePath, {
+      params: {
+        page,
+      },
+    });
     return data;
   }
 

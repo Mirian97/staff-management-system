@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import {
   TDepartmentPayload,
   departmentService,
@@ -8,10 +9,16 @@ export const DEPARTMENTS_QUERY_KEY = "departments";
 
 export function useDepartment() {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const currentPage = searchParams?.get("page") ?? "1";
 
   const { data } = useQuery({
-    queryKey: [DEPARTMENTS_QUERY_KEY],
-    queryFn: () => departmentService.getAll(),
+    queryKey: [DEPARTMENTS_QUERY_KEY, currentPage],
+    queryFn: () => departmentService.getAll(Number(currentPage)),
+    select: (data) => ({
+      lastPage: data.last_page,
+      departments: data.data,
+    }),
   });
 
   const refetchData = () => {
@@ -44,7 +51,8 @@ export function useDepartment() {
   });
 
   return {
-    departments: data,
+    departments: data?.departments,
+    lastPage: data?.lastPage,
     createDepartment,
     updateDepartment,
     deleteDepartment,
