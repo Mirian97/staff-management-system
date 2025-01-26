@@ -12,10 +12,12 @@ import { FC, PropsWithChildren } from "react";
 import DescriptiveAmountCard from "../_components/DescriptiveAmountCard";
 import { Button } from "../_components/ui/button";
 import { useAuth } from "../_hooks/useAuth";
+import useStatistic from "../_hooks/useStatistic";
 
 const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const { logout } = useAuth();
+  const { counts } = useStatistic();
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -31,17 +33,17 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <DescriptiveAmountCard
           name="Funcionários"
-          amount={12}
+          amount={counts?.employee_count}
           icon={<Users className="size-5 text-muted-foreground" />}
         />
         <DescriptiveAmountCard
           name="Departamentos"
-          amount={12}
+          amount={counts?.department_count}
           icon={<Building2 className="size-5 text-muted-foreground" />}
         />
         <DescriptiveAmountCard
           name="Tarefas"
-          amount={12}
+          amount={counts?.task_count}
           icon={<ListTodo className="size-5 text-muted-foreground" />}
         />
       </div>
