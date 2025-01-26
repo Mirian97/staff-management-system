@@ -3,6 +3,7 @@ import { api } from "../_config/api";
 export type TDepartment = {
   id: number;
   name: string;
+  employees_count: string;
 };
 
 export type TDepartmentPayload = {
@@ -10,7 +11,7 @@ export type TDepartmentPayload = {
 };
 
 class DepartmentService {
-  private readonly basePath = '/departments';
+  private readonly basePath = "/departments";
 
   async getAll(): Promise<TDepartment[]> {
     const { data } = await api.get(this.basePath);

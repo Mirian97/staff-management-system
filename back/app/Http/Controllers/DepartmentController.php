@@ -12,8 +12,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::paginate(10);
-
+        $departments = Department::withCount("employees")->paginate(10);
         return response()->json($departments);
     }
 
