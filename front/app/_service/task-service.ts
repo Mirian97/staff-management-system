@@ -2,8 +2,13 @@ import { api } from "../_config/api";
 import { TTaskSchema } from "../_schemas/task-schema";
 import { PaginatedResponse } from "../_types/response-type";
 import { EntityWithId } from "../_types/with-id-type";
+import { TEmployee } from "./employee-service";
 
-export type TTask = EntityWithId<TTaskSchema>;
+export type TTask = EntityWithId<
+  TTaskSchema & {
+    employee: TEmployee;
+  }
+>;
 
 class TaskService {
   private readonly basePath = "/tasks";

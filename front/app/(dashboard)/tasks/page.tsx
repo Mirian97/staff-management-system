@@ -6,23 +6,6 @@ import { useState } from "react";
 import { AddTaskButton } from "./_components/add-task-button";
 import { taskColumns } from "./_components/task-columns";
 
-export const mockTasks = [
-  {
-    id: 1,
-    title: "Implementar novo sistema",
-    description: "Desenvolver o novo sistema de gestão",
-    assignee: "João Silva",
-    dueDate: "2024-03-20",
-  },
-  {
-    id: 2,
-    title: "Reunião com cliente",
-    description: "Apresentar proposta comercial",
-    assignee: "Maria Santos",
-    dueDate: "2024-03-15",
-  },
-];
-
 const Tasks = () => {
   const { tasks, lastPage } = useTask();
   const [search, setSearch] = useState("");

@@ -14,20 +14,25 @@ export const taskColumns: ColumnDef<TTask>[] = [
     accessorKey: "description",
     header: "Descrição",
     cell: ({ row }) => (
-      <div className="!text-center line-clamp-1">
-        {row.original.description}
-      </div>
+      <div className="line-clamp-1">{row.original.description}</div>
     ),
   },
   {
-    accessorKey: "assignee",
+    accessorKey: "employee",
     header: "Responsável",
+    cell: ({ row }) => (
+      <div className="line-clamp-1">{row.original.employee.full_name}</div>
+    ),
   },
   {
     accessorKey: "dueDate",
     header: () => <div className="text-center">Data Limite</div>,
     cell: ({ row }) => (
-      <div className="!text-center">{row.original.due_date}</div>
+      <div className="!text-center">
+        {new Date(row.original.due_date).toLocaleDateString("pt-BR", {
+          dateStyle: "short",
+        })}
+      </div>
     ),
   },
   {

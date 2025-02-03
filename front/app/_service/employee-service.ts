@@ -8,6 +8,7 @@ export type TEmployeePayload = {
   phone: string;
   password: string;
   department_id: number;
+  full_name: string;
 };
 
 export type TEmployee = EntityWithId<TEmployeePayload>;

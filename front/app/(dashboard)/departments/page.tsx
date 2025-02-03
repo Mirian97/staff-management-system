@@ -2,13 +2,12 @@
 import { DataTable } from "@/app/_components/ui/datatable";
 import { Input } from "@/app/_components/ui/input";
 import { useDepartment } from "@/app/_hooks/useDepartment";
-import { useState } from "react";
 import { AddDepartmentButton } from "./_components/add-department-button";
 import { departmentColumns } from "./_components/department-columns";
 
 const Departments = () => {
-  const [search, setSearch] = useState("");
-  const { departments, lastPage } = useDepartment();
+  const { departments, lastPage, search, handlePartialFilter } =
+    useDepartment();
 
   return (
     <div className="space-y-4">
@@ -17,7 +16,7 @@ const Departments = () => {
           placeholder="Buscar departamentos..."
           className="max-w-sm"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handlePartialFilter({ search: e.target.value })}
         />
         <AddDepartmentButton />
       </div>

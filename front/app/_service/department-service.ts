@@ -1,6 +1,7 @@
+import { identity, pickBy } from "lodash";
 import { api } from "../_config/api";
 import { TDepartmentSchema } from "../_schemas/department-schema";
-import { PaginatedResponse } from "../_types/response-type";
+import { GlobalSearchParams, PaginatedResponse } from "../_types/response-type";
 import { EntityWithId } from "../_types/with-id-type";
 
 export type TDepartment = EntityWithId<{
@@ -11,11 +12,12 @@ export type TDepartment = EntityWithId<{
 class DepartmentService {
   private readonly basePath = "/departments";
 
-  async getAll(page?: number): Promise<PaginatedResponse<TDepartment>> {
+  async getAll(
+    params: GlobalSearchParams
+  ): Promise<PaginatedResponse<TDepartment>> {
+    const cleanedParams = pickBy(params, identity);
     const { data } = await api.get(this.basePath, {
-      params: {
-        page,
-      },
+      params: cleanedParams,
     });
     return data;
   }

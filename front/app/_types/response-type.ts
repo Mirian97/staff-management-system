@@ -19,3 +19,8 @@ export interface PaginatedResponse<T> {
   to: number;
   total: number;
 }
+
+export interface GlobalSearchParams {
+  page?: number;
+  search?: string;
+}
