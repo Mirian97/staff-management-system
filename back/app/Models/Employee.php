@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,13 @@ class Employee extends Authenticatable implements JWTSubject
     protected $hidden = [
         "password",
     ];
+
+    /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = ['full_name'];
 
     /**
      * Get the attributes that should be cast.
@@ -71,5 +79,10 @@ class Employee extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function fullName():Attribute
+    {
+        return new Attribute(get: fn()=> "{$this->first_name} {$this->last_name}");
     }
 }
