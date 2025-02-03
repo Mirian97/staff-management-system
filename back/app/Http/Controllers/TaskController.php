@@ -12,7 +12,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::paginate(10);
+        $tasks = Task::with("employee")->paginate(10);
 
         return response()->json($tasks);
     }
