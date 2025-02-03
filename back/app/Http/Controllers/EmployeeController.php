@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -77,5 +79,23 @@ class EmployeeController extends Controller
         return response()->json([
             'message' => 'Employee deleted successfully.',
         ]);
+    }
+
+    public function listByName(Request $request)
+    {
+        $name =  $request->query("name");
+
+        $employees = Employee::whereLike('first_name', '%'.$name.'%')
+            ->orWhereLike('last_name', '%'.$name.'%')
+            ->limit(50)
+            ->get()
+            ->map(function($employee) {
+                return [
+                    'value' => $employee->id,
+                    'label' => $employee->full_name
+                ];
+            });
+
+        return response()->json($employees);
     }
 }
