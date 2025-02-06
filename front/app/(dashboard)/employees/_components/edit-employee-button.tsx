@@ -1,10 +1,19 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
+import { TEmployeeSchema } from "@/app/_schemas/employee-schema";
+import { EntityId } from "@/app/_types/with-id-type";
 import { Edit2 } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { EmployeeForm } from "./employee-form";
 
-export const EditEmployeeButton = () => {
+interface EditEmployeeButtonProps extends EntityId {
+  employee: TEmployeeSchema;
+}
+
+export const EditEmployeeButton: FC<EditEmployeeButtonProps> = ({
+  employee,
+  id,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -17,7 +26,12 @@ export const EditEmployeeButton = () => {
       >
         <Edit2 />
       </Button>
-      <EmployeeForm isOpen={isOpen} setIsOpen={setIsOpen} employeeID={100} />
+      <EmployeeForm
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        employeeID={id}
+        employee={employee}
+      />
     </>
   );
 };
