@@ -22,6 +22,9 @@ Route::middleware("auth")->group(function () {
     Route::prefix('employees')->group(function () {
         Route::get('listByName', [EmployeeController::class,'listByName']);
     });
+    Route::prefix('departments')->group(function () {
+        Route::get('listByName', [DepartmentController::class,'listByName']);
+    });
     Route::apiResources([
         'departments' => DepartmentController::class,
         'employees' => EmployeeController::class,
