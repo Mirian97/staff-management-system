@@ -11,6 +11,7 @@ export const employeeSchema = z
       .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
         message: "O ID do departamento deve ser um número inteiro positivo",
       }),
+    department_name: z.string().min(2, "Selecione um departamento"),
     password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
     confirm_password: z.string(),
   })
