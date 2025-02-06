@@ -2,6 +2,7 @@ import { identity, pickBy } from "lodash";
 import { api } from "../_config/api";
 import { TDepartmentSchema } from "../_schemas/department-schema";
 import { GlobalSearchParams, PaginatedResponse } from "../_types/response-type";
+import { SelectOptionType } from "../_types/select-type";
 import { EntityWithId } from "../_types/with-id-type";
 
 export type TDepartment = EntityWithId<{
@@ -18,6 +19,13 @@ class DepartmentService {
     const cleanedParams = pickBy(params, identity);
     const { data } = await api.get(this.basePath, {
       params: cleanedParams,
+    });
+    return data;
+  }
+
+  async listByName(name: string): Promise<SelectOptionType[]> {
+    const { data } = await api.get(`${this.basePath}/listByName`, {
+      params: { name },
     });
     return data;
   }
