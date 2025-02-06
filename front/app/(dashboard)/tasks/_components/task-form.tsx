@@ -1,3 +1,4 @@
+import EmployeeAsyncSelect from "@/app/_components/employee-async-select";
 import { Button } from "@/app/_components/ui/button";
 import { DatePicker } from "@/app/_components/ui/date-picker";
 import {
@@ -18,17 +19,9 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/_components/ui/select";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { useTask } from "@/app/_hooks/useTask";
 import { taskSchema, TTaskSchema } from "@/app/_schemas/task-schema";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -107,18 +100,23 @@ export const TaskForm: FC<TaskFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Funcionário</FormLabel>
-                  <Select
-                    value={field.value}
-                    disabled={field.disabled}
-                    onValueChange={(e) => field.onChange(e)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um funcionário..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2">Mirian</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <EmployeeAsyncSelect
+                    value={
+                      field.value
+                        ? {
+                            label: form.getValues().assignee_name,
+                            value: Number(form.getValues().assignee_id),
+                          }
+                        : null
+                    }
+                    isDisabled={field.disabled}
+                    onChange={(newValue) => {
+                      if (newValue) {
+                        form.setValue("assignee_id", String(newValue.value));
+                        form.setValue("assignee_name", newValue.label);
+                      }
+                    }}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -129,7 +127,10 @@ export const TaskForm: FC<TaskFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Vencimento</FormLabel>
-                  <DatePicker value={field.value} onChange={field.onChange} />
+                  <DatePicker
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
