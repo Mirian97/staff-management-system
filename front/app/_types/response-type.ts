@@ -24,3 +24,8 @@ export interface GlobalSearchParams {
   page?: number;
   search?: string;
 }
+
+export interface DescriptiveType {
+  id: number;
+  name: string;
+}
