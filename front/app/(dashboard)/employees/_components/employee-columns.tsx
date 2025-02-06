@@ -19,6 +19,7 @@ export const employeeColumns: ColumnDef<TEmployee>[] = [
   },
   {
     accessorKey: "department",
+    header: "Departamento",
     cell: ({ row }) => (
       <div className="line-clamp-1">{row.original.department.name}</div>
     ),
