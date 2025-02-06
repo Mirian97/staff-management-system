@@ -9,6 +9,7 @@ export const taskColumns: ColumnDef<TTask>[] = [
   {
     accessorKey: "title",
     header: "Título",
+    cell: ({ row }) => <div className="line-clamp-1">{row.original.title}</div>,
   },
   {
     accessorKey: "description",
@@ -44,7 +45,10 @@ export const taskColumns: ColumnDef<TTask>[] = [
       },
     }) => (
       <div className="text-center flex flex-nowrap">
-        <EditTaskButton id={id} task={task} />
+        <EditTaskButton
+          id={id}
+          task={{ ...task, assignee_name: task.employee.full_name }}
+        />
         <DeleteTaskButton id={id} name={task.title} />
       </div>
     ),
