@@ -14,7 +14,7 @@ import * as React from "react";
 
 interface DatePickerProps {
   placeholder?: string;
-  value: Date;
+  value: Date | undefined;
   onChange?: () => void;
 }
 
