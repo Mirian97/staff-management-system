@@ -1,3 +1,4 @@
+import DepartmentAsyncSelect from "@/app/_components/department-async-select";
 import { Button } from "@/app/_components/ui/button";
 import {
   Dialog,
@@ -17,13 +18,7 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/_components/ui/select";
+import { useEmployee } from "@/app/_hooks/useEmployee";
 import {
   employeeSchema,
   TEmployeeSchema,
@@ -36,29 +31,33 @@ interface EmployeeFormProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   employeeID?: number;
+  employee?: TEmployeeSchema;
 }
 
 export const EmployeeForm: FC<EmployeeFormProps> = ({
   isOpen,
   setIsOpen,
   employeeID,
+  employee,
 }) => {
+  const { createEmployee, updateEmployee } = useEmployee({
+    closeDialog: () => setIsOpen(false),
+  });
   const isEditting = employeeID !== undefined;
   const form = useForm<TEmployeeSchema>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: {
-      first_name: "",
-      last_name: "",
-      phone: "",
-      department_id: undefined,
-      email: "",
-      password: "",
-      confirm_password: "",
-    },
+    defaultValues: employee,
   });
 
   const onSubmit = (values: TEmployeeSchema) => {
-    console.log(values);
+    if (isEditting) {
+      updateEmployee({
+        id: employeeID,
+        payload: values,
+      });
+    } else {
+      createEmployee(values);
+    }
   };
 
   return (
@@ -148,18 +147,23 @@ export const EmployeeForm: FC<EmployeeFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Departamento</FormLabel>
-                  <Select
-                    value={field.value}
-                    disabled={field.disabled}
-                    onValueChange={(e) => field.onChange(e)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2">Telecomunicacoes</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <DepartmentAsyncSelect
+                    value={
+                      field.value
+                        ? {
+                            label: form.getValues().department_name,
+                            value: Number(form.getValues().department_id),
+                          }
+                        : null
+                    }
+                    isDisabled={field.disabled}
+                    onChange={(newValue) => {
+                      if (newValue) {
+                        form.setValue("department_id", String(newValue.value));
+                        form.setValue("department_name", newValue.label);
+                      }
+                    }}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
