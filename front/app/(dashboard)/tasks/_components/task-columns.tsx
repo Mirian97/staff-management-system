@@ -27,7 +27,7 @@ export const taskColumns: ColumnDef<TTask>[] = [
   },
   {
     accessorKey: "dueDate",
-    header: () => <div className="text-center">Data Limite</div>,
+    header: () => <div className="text-center w-28">Data Limite</div>,
     cell: ({ row }) => (
       <div className="!text-center">
         {new Date(row.original.due_date).toLocaleDateString("pt-BR", {
