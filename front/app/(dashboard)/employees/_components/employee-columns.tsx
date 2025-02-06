@@ -43,7 +43,7 @@ export const employeeColumns: ColumnDef<TEmployee>[] = [
           }}
           id={employee.id}
         />
-        <DeleteEmployeeButton />
+        <DeleteEmployeeButton id={employee.id} name={full_name} />
       </div>
     ),
   },
