@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+
+use function Laravel\Prompts\select;
 
 class EmployeeController extends Controller
 {
@@ -14,7 +15,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::paginate(10);
+        $employees = Employee::with(["department" => function ($query) {
+            $query->select("id", "name");
+        }])-> paginate(10);
 
         return response()->json($employees);
     }
@@ -87,7 +90,8 @@ class EmployeeController extends Controller
 
         $employees = Employee::whereLike('first_name', '%'.$name.'%')
             ->orWhereLike('last_name', '%'.$name.'%')
-            ->limit(50)
+            ->orWhereLike('id', '%'.$name.'%')
+            ->limit(100)
             ->get()
             ->map(function($employee) {
                 return [
