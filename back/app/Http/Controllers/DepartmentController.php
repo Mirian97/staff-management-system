@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartmentRequest;
 use App\Models\Department;
+use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
@@ -76,5 +77,19 @@ class DepartmentController extends Controller
         return response()->json([
             'message' => 'Department deleted successfully.',
         ]);
+    }
+
+    public function listByName(Request $request)
+    {
+        $name =  $request->query("name");
+
+        $departments = Department::whereLike('id', '%'.$name.'%')
+            ->orWhereLike('name', '%'.$name.'%')
+            ->limit(100)
+            ->select(["id AS value", "name AS label"])
+            ->get();
+
+
+        return response()->json($departments);
     }
 }
