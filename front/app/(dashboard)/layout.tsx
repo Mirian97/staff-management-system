@@ -7,7 +7,7 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import DescriptiveAmountCard from "../_components/descriptive-amount-card";
 import { Button } from "../_components/ui/button";
@@ -18,6 +18,7 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const { logout } = useAuth();
   const { counts } = useStatistic();
+  const pathname = usePathname();
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -47,7 +48,7 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           icon={<ListTodo className="size-5 text-muted-foreground" />}
         />
       </div>
-      <Tabs defaultValue="employees" className="space-y-4">
+      <Tabs defaultValue={pathname.split("/")[1]} className="space-y-4">
         <TabsList>
           <TabsTrigger
             value="employees"
