@@ -11,9 +11,17 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::withCount("employees")->paginate(10);
+        $search = "%{$request->query(key: 'search')}%";
+
+        $departments = Department::where(function ($query) use ($search) {
+            $query->whereLike('id', $search)
+                ->orWhereLike('name', $search);
+        })
+            ->withCount('employees')
+            ->paginate(10);
+
         return response()->json($departments);
     }
 
@@ -81,14 +89,13 @@ class DepartmentController extends Controller
 
     public function listByName(Request $request)
     {
-        $name =  $request->query("name");
+        $name = "%{$request->query('name')}%";
 
-        $departments = Department::whereLike('id', '%'.$name.'%')
-            ->orWhereLike('name', '%'.$name.'%')
+        $departments = Department::whereLike('id', $name)
+            ->orWhereLike('name', $name)
             ->limit(100)
-            ->select(["id AS value", "name AS label"])
+            ->select(['id AS value', 'name AS label'])
             ->get();
-
 
         return response()->json($departments);
     }
