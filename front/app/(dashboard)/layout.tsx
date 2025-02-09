@@ -7,6 +7,7 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import DescriptiveAmountCard from "../_components/descriptive-amount-card";
@@ -50,20 +51,14 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
       </div>
       <Tabs defaultValue={pathname.split("/")[1]} className="space-y-4">
         <TabsList>
-          <TabsTrigger
-            value="employees"
-            onClick={() => router.push("/employees")}
-          >
-            Funcionários
+          <TabsTrigger value="employees">
+            <Link href="employees">Funcionários</Link>
           </TabsTrigger>
-          <TabsTrigger
-            value="departments"
-            onClick={() => router.push("/departments")}
-          >
-            Departamentos
+          <TabsTrigger value="departments">
+            <Link href="departments">Departamentos</Link>
           </TabsTrigger>
-          <TabsTrigger value="tasks" onClick={() => router.push("/tasks")}>
-            Tarefas
+          <TabsTrigger value="tasks">
+            <Link href="tasks">Tarefas</Link>
           </TabsTrigger>
         </TabsList>
         {children}
