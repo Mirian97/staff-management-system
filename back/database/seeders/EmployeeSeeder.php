@@ -22,7 +22,7 @@ class EmployeeSeeder extends Seeder
             'email' => 'imjustmirian@gmail.com',
             'phone' => '11 92332-3883',
             'department_id' => 1,
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
 
         ]);
 
