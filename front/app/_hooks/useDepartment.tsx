@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { defaultGlobalSearchParams } from "../_constants/global-search-params";
 import { TDepartmentSchema } from "../_schemas/department-schema";
 import { departmentService } from "../_service/department-service";
 import { GlobalSearchParams } from "../_types/response-type";
@@ -16,14 +17,15 @@ export function useDepartment({ closeDialog }: DepartmentHookProps = {}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get("page") ?? "1";
-  const [filters, setFilters] = useState<GlobalSearchParams>();
-
+  const [filters, setFilters] = useState<GlobalSearchParams>(
+    defaultGlobalSearchParams
+  );
   const handlePartialFilter = (partial: Partial<GlobalSearchParams>) => {
-    setFilters((current) => ({ ...current, partial }));
+    setFilters((current) => ({ ...current, ...partial }));
   };
 
   const { data } = useQuery({
-    queryKey: [DEPARTMENTS_QUERY_KEY, currentPage, filters?.search],
+    queryKey: [DEPARTMENTS_QUERY_KEY, currentPage, filters],
     queryFn: () =>
       departmentService.getAll({
         page: Number(currentPage),
