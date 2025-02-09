@@ -1,6 +1,6 @@
 "use client";
+import { DebouncedInput } from "@/app/_components/debounced-input";
 import { DataTable } from "@/app/_components/ui/datatable";
-import { Input } from "@/app/_components/ui/input";
 import { useDepartment } from "@/app/_hooks/useDepartment";
 import { AddDepartmentButton } from "./_components/add-department-button";
 import { departmentColumns } from "./_components/department-columns";
@@ -12,11 +12,11 @@ const Departments = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <Input
+        <DebouncedInput
           placeholder="Buscar departamentos..."
           className="max-w-sm"
           value={search}
-          onChange={(e) => handlePartialFilter({ search: e.target.value })}
+          onChange={(newValue) => handlePartialFilter({ search: newValue })}
         />
         <AddDepartmentButton />
       </div>

@@ -1,23 +1,21 @@
 "use client";
+import { DebouncedInput } from "@/app/_components/debounced-input";
 import { DataTable } from "@/app/_components/ui/datatable";
-import { Input } from "@/app/_components/ui/input";
 import { useTask } from "@/app/_hooks/useTask";
-import { useState } from "react";
 import { AddTaskButton } from "./_components/add-task-button";
 import { taskColumns } from "./_components/task-columns";
 
 const Tasks = () => {
-  const { tasks, lastPage } = useTask();
-  const [search, setSearch] = useState("");
+  const { tasks, lastPage, handlePartialFilter, search } = useTask();
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <Input
+        <DebouncedInput
           placeholder="Buscar tarefas..."
           className="max-w-sm"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(newValue) => handlePartialFilter({ search: newValue })}
         />
         <AddTaskButton />
       </div>
