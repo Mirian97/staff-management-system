@@ -1,6 +1,7 @@
+import { identity, pickBy } from "lodash";
 import { api } from "../_config/api";
 import { TTaskSchema } from "../_schemas/task-schema";
-import { PaginatedResponse } from "../_types/response-type";
+import { GlobalSearchParams, PaginatedResponse } from "../_types/response-type";
 import { EntityWithId } from "../_types/with-id-type";
 import { TEmployee } from "./employee-service";
 
@@ -13,11 +14,10 @@ export type TTask = EntityWithId<
 class TaskService {
   private readonly basePath = "/tasks";
 
-  async getAll(page?: number): Promise<PaginatedResponse<TTask>> {
+  async getAll(params: GlobalSearchParams): Promise<PaginatedResponse<TTask>> {
+    const cleanedParams = pickBy(params, identity);
     const { data } = await api.get(this.basePath, {
-      params: {
-        page,
-      },
+      params: cleanedParams,
     });
     return data;
   }
