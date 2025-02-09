@@ -17,10 +17,10 @@ class EmployeeController extends Controller
 
         $employees = Employee::where(function ($query) use ($search) {
             $query->whereLike('first_name', $search)
-                ->whereLike('last_name', $search)
-                ->whereLike('email', $search)
-                ->whereLike('phone', $search)
-                ->whereRelation('department', 'name', 'like', $search);
+                ->orWhereLike('last_name', $search)
+                ->orWhereLike('email', $search)
+                ->orWhereLike('phone', $search)
+                ->orWhereRelation('department', 'name', 'like', $search);
         })
             ->with(['department' => function ($query) {
                 $query->select('id', 'name');
