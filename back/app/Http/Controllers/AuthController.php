@@ -16,6 +16,7 @@ class AuthController extends Controller
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['message' => 'Invalid credentials'], 401);
             }
+
             return $this->respondWithToken($token);
         } catch (JWTException $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -28,9 +29,10 @@ class AuthController extends Controller
     public function me()
     {
         try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['message' => 'User not found'], 404);
             }
+
             return response()->json(compact('user'));
         } catch (JWTException $e) {
             return response()->json(['message' => 'Invalid token'], 400);
@@ -40,13 +42,14 @@ class AuthController extends Controller
     public function logout()
     {
         JWTAuth::invalidate(JWTAuth::getToken());
+
         return response()->json(['message' => 'Logged out']);
     }
 
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param  string  $token
      */
     protected function respondWithToken($token)
     {
