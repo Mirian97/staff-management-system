@@ -6,18 +6,26 @@ use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
-use function Laravel\Prompts\select;
-
 class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::with(["department" => function ($query) {
-            $query->select("id", "name");
-        }])-> paginate(10);
+        $search = "%{$request->query(key: 'search')}%";
+
+        $employees = Employee::where(function ($query) use ($search) {
+            $query->whereLike('first_name', $search)
+                ->whereLike('last_name', $search)
+                ->whereLike('email', $search)
+                ->whereLike('phone', $search)
+                ->whereRelation('department', 'name', 'like', $search);
+        })
+            ->with(['department' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->paginate(10);
 
         return response()->json($employees);
     }
@@ -86,17 +94,17 @@ class EmployeeController extends Controller
 
     public function listByName(Request $request)
     {
-        $name =  $request->query("name");
+        $name = "%{$request->query('name')}%";
 
-        $employees = Employee::whereLike('first_name', '%'.$name.'%')
-            ->orWhereLike('last_name', '%'.$name.'%')
-            ->orWhereLike('id', '%'.$name.'%')
+        $employees = Employee::whereLike('first_name', $name)
+            ->orWhereLike('last_name', $name)
+            ->orWhereLike('id', $name)
             ->limit(100)
             ->get()
-            ->map(function($employee) {
+            ->map(function ($employee) {
                 return [
                     'value' => $employee->id,
-                    'label' => $employee->full_name
+                    'label' => $employee->full_name,
                 ];
             });
 
