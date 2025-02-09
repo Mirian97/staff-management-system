@@ -1,8 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+import { defaultGlobalSearchParams } from "../_constants/global-search-params";
 import { TTaskSchema } from "../_schemas/task-schema";
 import { taskService } from "../_service/task-service";
+import { GlobalSearchParams } from "../_types/response-type";
 
 export const TASKS_QUERY_KEY = "tasks";
 
@@ -14,10 +17,17 @@ export function useTask({ closeDialog }: TaskHookProps = {}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get("page") ?? "1";
+  const [filters, setFilters] = useState<GlobalSearchParams>(
+    defaultGlobalSearchParams
+  );
+  const handlePartialFilter = (partial: Partial<GlobalSearchParams>) => {
+    setFilters((current) => ({ ...current, ...partial }));
+  };
 
   const { data } = useQuery({
-    queryKey: [TASKS_QUERY_KEY, currentPage],
-    queryFn: () => taskService.getAll(Number(currentPage)),
+    queryKey: [TASKS_QUERY_KEY, currentPage, filters],
+    queryFn: () =>
+      taskService.getAll({ page: Number(currentPage), search: filters.search }),
     select: (data) => ({
       lastPage: data.last_page,
       tasks: data.data,
@@ -63,5 +73,7 @@ export function useTask({ closeDialog }: TaskHookProps = {}) {
     createTask,
     updateTask,
     deleteTask,
+    ...filters,
+    handlePartialFilter,
   };
 }
