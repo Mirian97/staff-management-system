@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('description');
             $table->date('due_date');
             $table
-            ->foreignId('assignee_id')
-            ->constrained('employees')
-            ->onUpdate("cascade")
-            ->onDelete('cascade');
+                ->foreignId('assignee_id')
+                ->constrained('employees')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

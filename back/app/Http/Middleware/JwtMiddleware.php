@@ -21,9 +21,11 @@ class JwtMiddleware
         try {
             JWTAuth::parseToken()->authenticate();
         } catch (JWTException $e) {
-            Log::error("JWT Error " . $e->getMessage());
+            Log::error('JWT Error '.$e->getMessage());
+
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
+
         return $next($request);
     }
 }

@@ -15,9 +15,9 @@ class StatisticController extends Controller
         $department_count = Department::count();
 
         return response()->json([
-            "employee_count" => $employee_count,
-            "task_count" => $task_count,
-            "department_count" => $department_count,
+            'employee_count' => $employee_count,
+            'task_count' => $task_count,
+            'department_count' => $department_count,
         ]);
     }
 }

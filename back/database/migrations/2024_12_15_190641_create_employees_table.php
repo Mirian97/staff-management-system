@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone');
             $table
-            ->foreignId('department_id')
-            ->constrained('departments')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
-            $table->string("password");
+                ->foreignId('department_id')
+                ->constrained('departments')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('password');
             $table->timestamps();
         });
     }
