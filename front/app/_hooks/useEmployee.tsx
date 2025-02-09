@@ -1,8 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+import { defaultGlobalSearchParams } from "../_constants/global-search-params";
 import { TEmployeeSchema } from "../_schemas/employee-schema";
 import { employeeService } from "../_service/employee-service";
+import { GlobalSearchParams } from "../_types/response-type";
 
 export const EMPLOYEES_QUERY_KEY = "employees";
 
@@ -14,10 +17,20 @@ export function useEmployee({ closeDialog }: EmployeeHookProps = {}) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get("page") ?? "1";
+  const [filters, setFilters] = useState<GlobalSearchParams>(
+    defaultGlobalSearchParams
+  );
+  const handlePartialFilter = (partial: Partial<GlobalSearchParams>) => {
+    setFilters((current) => ({ ...current, ...partial }));
+  };
 
   const { data } = useQuery({
-    queryKey: [EMPLOYEES_QUERY_KEY, currentPage],
-    queryFn: () => employeeService.getAll({ page: Number(currentPage) }),
+    queryKey: [EMPLOYEES_QUERY_KEY, currentPage, filters],
+    queryFn: () =>
+      employeeService.getAll({
+        page: Number(currentPage),
+        search: filters.search,
+      }),
     select: (data) => ({
       lastPage: data.last_page,
       employees: data.data,
@@ -62,5 +75,7 @@ export function useEmployee({ closeDialog }: EmployeeHookProps = {}) {
     createEmployee,
     updateEmployee,
     deleteEmployee,
+    ...filters,
+    handlePartialFilter,
   };
 }
