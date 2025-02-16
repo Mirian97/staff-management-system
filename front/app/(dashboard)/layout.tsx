@@ -7,17 +7,21 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import DescriptiveAmountCard from "../_components/descriptive-amount-card";
 import { Button } from "../_components/ui/button";
-import { useAuth } from "../_hooks/useAuth";
 import useStatistic from "../_hooks/useStatistic";
 
 const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
-  const router = useRouter();
-  const { logout } = useAuth();
+  const { data: session } = useSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   const { counts } = useStatistic();
   const pathname = usePathname();
 
@@ -28,7 +32,16 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           <LayoutDashboard />
           <h1 className="text-3xl font-bold">Sistema de Gestão</h1>
         </div>
-        <Button variant="ghost" size="icon" onClick={logout}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            signOut({
+              redirect: true,
+              callbackUrl: "/login",
+            })
+          }
+        >
           <LogOut className="!size-6" />
         </Button>
       </div>
