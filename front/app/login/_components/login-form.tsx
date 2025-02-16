@@ -9,14 +9,14 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { useLogin } from "@/app/_hooks/useLogin";
+import { useAuth } from "@/app/_hooks/useAuth";
 import { loginSchema, TLoginSchema } from "@/app/_schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const { login, isLoading } = useLogin();
+  const { login, isLoading } = useAuth();
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
