@@ -1,29 +1,32 @@
 "use client";
 import { Tabs, TabsList, TabsTrigger } from "@/app/_components/ui/tabs";
-import {
-  Building2,
-  LayoutDashboard,
-  ListTodo,
-  LogOut,
-  Users,
-} from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
-import DescriptiveAmountCard from "../_components/descriptive-amount-card";
+import { GeneralStatistic } from "../_components/general-statistic";
 import { Button } from "../_components/ui/button";
-import useStatistic from "../_hooks/useStatistic";
 
 const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-200">
+        <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Carregando...
+          </h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!session?.accessToken && status == "unauthenticated") {
     redirect("/login");
   }
-
-  const { counts } = useStatistic();
-  const pathname = usePathname();
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -45,23 +48,7 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           <LogOut className="!size-6" />
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <DescriptiveAmountCard
-          name="Funcionários"
-          amount={counts?.employee_count}
-          icon={<Users className="size-5 text-muted-foreground" />}
-        />
-        <DescriptiveAmountCard
-          name="Departamentos"
-          amount={counts?.department_count}
-          icon={<Building2 className="size-5 text-muted-foreground" />}
-        />
-        <DescriptiveAmountCard
-          name="Tarefas"
-          amount={counts?.task_count}
-          icon={<ListTodo className="size-5 text-muted-foreground" />}
-        />
-      </div>
+      <GeneralStatistic />
       <Tabs defaultValue={pathname.split("/")[1]} className="space-y-4">
         <TabsList>
           <TabsTrigger value="employees">
