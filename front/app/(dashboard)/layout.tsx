@@ -16,9 +16,9 @@ import { Button } from "../_components/ui/button";
 import useStatistic from "../_hooks/useStatistic";
 
 const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session?.accessToken) {
+  if (!session?.accessToken && status == "unauthenticated") {
     redirect("/login");
   }
 
