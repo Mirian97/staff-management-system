@@ -18,7 +18,7 @@ import useStatistic from "../_hooks/useStatistic";
 const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session } = useSession();
 
-  if (!session) {
+  if (!session?.accessToken) {
     redirect("/login");
   }
 
